@@ -1,33 +1,40 @@
 Shalk = Shalk or {}
 Shalk.Name = "ShalkTracker"
-Shalk.Version = "1.1"
+Shalk.Version = "1.2"
 
 Shalk.Panel = ZO_SimpleSceneFragment:New(ShalkTrackerPanel)
 
-Shalk.SubterraneanAssault = 86019
-Shalk.DeepFissure = 86015
-Shalk.Scorch = 86015
+Shalk.FirstHitCooldown = 3.0
 
 Shalk.Spells = {
-	[86009] = {
+	[86009] = { -- Scorch
 		["Icon"] = "/esoui/art/icons/ability_warden_015.dds",
-		["Cooldown"] = 6,
+		["SecondHitCooldown"] = 6.0,
 	},
-	[86015] = {
+	[86015] = { -- Deep Fissure
 		["Icon"] = "/esoui/art/icons/ability_warden_015_a.dds",
-		["Cooldown"] = 6,
+		["SecondHitCooldown"] = 6.0,
 	},
-	[86019] = {
+	[86019] = { -- Subterranean Assault
 		["Icon"] = "/esoui/art/icons/ability_warden_015_b.dds",
-		["Cooldown"] = 3,
+		["SecondHitCooldown"] = 3.0,
 	},
 }
 
-Shalk.Countdown = 0
+Shalk.Countdown = 0.0
 
 function Shalk.UpdatePanel()
-	ShalkTrackerPanelLabel:SetText(tostring(Shalk.Countdown))
-	Shalk.Countdown = Shalk.Countdown - 1
+	-- Setting label color depending on first or second hit
+	local hitColor = ZO_ColorDef:New("FFFFFF")
+	if Shalk.Countdown > 0 and Shalk.Countdown <= Shalk.Spell.SecondHitCooldown then
+		hitColor = ZO_ColorDef:New("65FBF7")
+	end
+	ShalkTrackerPanelLabel:SetText(
+		hitColor:Colorize(
+			string.format("%.1f", Shalk.Countdown)
+		)
+	)
+	Shalk.Countdown = Shalk.Countdown - 0.1
 	if Shalk.Countdown < 0 then
 		EVENT_MANAGER:UnregisterForUpdate("ShalkTrackerLoop")
 	end
@@ -39,9 +46,10 @@ function Shalk.OnEffectChanged(_, changeType, _, effectName, unitTag, beginTime,
 	
 	if Shalk.Spells[abilityId] ~= nil then
 		EVENT_MANAGER:UnregisterForUpdate("ShalkTrackerLoop")
-		Shalk.Countdown = Shalk.Spells[abilityId].Cooldown
+		Shalk.Spell = Shalk.Spells[abilityId]
+		Shalk.Countdown = Shalk.FirstHitCooldown + Shalk.Spell.SecondHitCooldown
 		Shalk.UpdatePanel()
-		EVENT_MANAGER:RegisterForUpdate("ShalkTrackerLoop", 1000, Shalk.UpdatePanel)
+		EVENT_MANAGER:RegisterForUpdate("ShalkTrackerLoop", 100, Shalk.UpdatePanel)
 	end
 end
 
