@@ -1,7 +1,7 @@
 ## Title: ShalkTracker
 ## Author: ownedbynico
-## Contributors: Nyuw
-## Version: 1.1
+## Contributors: nyuw
+## Version: 1.2
 ## Description: Tracks your Shalks from Scorch, Subterranean Assault and Deep Fissure.
 ## APIVersion: 101041
 ## SavedVariables: ShalkTrackerSV

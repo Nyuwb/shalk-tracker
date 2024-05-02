@@ -11,15 +11,15 @@ Shalk.Scorch = 86015
 Shalk.Spells = {
 	[86009] = {
 		["Icon"] = "/esoui/art/icons/ability_warden_015.dds",
-		["Cooldown"] = 3,
+		["Cooldown"] = 6,
 	},
 	[86015] = {
 		["Icon"] = "/esoui/art/icons/ability_warden_015_a.dds",
-		["Cooldown"] = 9,
+		["Cooldown"] = 6,
 	},
 	[86019] = {
 		["Icon"] = "/esoui/art/icons/ability_warden_015_b.dds",
-		["Cooldown"] = 6,
+		["Cooldown"] = 3,
 	},
 }
 
